@@ -2,21 +2,29 @@
 
 [ext_resource type="Texture2D" uid="uid://eol2ikpp7ks3" path="res://assets/texture/tile.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://cxsto67iiil5h" path="res://assets/texture/dynamic_tile.png" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://cssb115yl0pk2" path="res://scenes/player.tscn" id="3_lnu2h"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
 0:0/0 = 0
 1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:1/0 = 0
 2:1/0 = 0
 0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:2/0 = 0
 2:2/0 = 0
 3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -27,6 +35,7 @@ texture = ExtResource("2_yqjtg")
 0:2/animation_frame_2/duration = 1.0
 0:2/animation_frame_3/duration = 1.0
 0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:3/animation_speed = 8.0
 0:3/animation_mode = 1
 0:3/animation_frame_0/duration = 1.0
@@ -34,6 +43,7 @@ texture = ExtResource("2_yqjtg")
 0:3/animation_frame_2/duration = 1.0
 0:3/animation_frame_3/duration = 1.0
 0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:4/animation_speed = 8.0
 0:4/animation_mode = 1
 0:4/animation_frame_0/duration = 1.0
@@ -41,14 +51,17 @@ texture = ExtResource("2_yqjtg")
 0:4/animation_frame_2/duration = 1.0
 0:4/animation_frame_3/duration = 1.0
 0:4/0 = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:5/animation_speed = 8.0
 0:5/animation_frame_0/duration = 1.0
 0:5/animation_frame_1/duration = 1.0
 0:5/animation_frame_2/duration = 1.0
 0:5/animation_frame_3/duration = 1.0
 0:5/0 = 0
+0:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_8cj0n"]
+physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_yqjtg")
 sources/1 = SubResource("TileSetAtlasSource_lnu2h")
 
@@ -65,6 +78,18 @@ texture_region_size = Vector2i(16, 32)
 [sub_resource type="TileSet" id="TileSet_iywne"]
 sources/0 = SubResource("TileSetAtlasSource_lbhrr")
 
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_lnu2h"]
+b = Vector2(256, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_lbhrr"]
+b = Vector2(256, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_iywne"]
+b = Vector2(0, 256)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_p57ef"]
+b = Vector2(0, 256)
+
 [node name="Game" type="Node2D" unique_id=1927392127]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1055387437]
@@ -78,3 +103,30 @@ tile_set = SubResource("TileSet_8cj0n")
 [node name="OverlayTileMapLayer" type="TileMapLayer" parent="." unique_id=714187892]
 tile_map_data = PackedByteArray("AAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAAPAAgAAAAAAAAAAAAPAAkAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_iywne")
+
+[node name="Player" parent="." unique_id=1404759806 instance=ExtResource("3_lnu2h")]
+position = Vector2(81, 87)
+
+[node name="WorldBounds" type="Node2D" parent="." unique_id=952979351]
+
+[node name="TopBoundary" type="StaticBody2D" parent="WorldBounds" unique_id=1957543395]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/TopBoundary" unique_id=1592412172]
+shape = SubResource("SegmentShape2D_lnu2h")
+
+[node name="BottomBoundary" type="StaticBody2D" parent="WorldBounds" unique_id=1581706097]
+position = Vector2(0, 256)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/BottomBoundary" unique_id=2064368446]
+shape = SubResource("SegmentShape2D_lbhrr")
+
+[node name="LeftBoundary" type="StaticBody2D" parent="WorldBounds" unique_id=2091621742]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/LeftBoundary" unique_id=1137924228]
+shape = SubResource("SegmentShape2D_iywne")
+
+[node name="RightBoundary" type="StaticBody2D" parent="WorldBounds" unique_id=1820105292]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/RightBoundary" unique_id=1572602145]
+position = Vector2(256, 0)
+shape = SubResource("SegmentShape2D_p57ef")
