@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PickupConfig" format=3 uid="uid://smmiblja682w"]
+
+[ext_resource type="Script" uid="uid://bs7vft57112k2" path="res://config/pickup_config.gd" id="1_84q5s"]
+[ext_resource type="Texture2D" uid="uid://bqfu12hcnacfg" path="res://assets/atlas/pickup_rapid.tres" id="1_ohg0i"]
+
+[resource]
+script = ExtResource("1_84q5s")
+pickup_type = 1
+display_name = "射速道具"
+drop_weight = 2.0
+icon = ExtResource("1_ohg0i")
+fire_rate_multiplier = 2.0
+metadata/_custom_type_script = "uid://bs7vft57112k2"
