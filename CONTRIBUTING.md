@@ -115,3 +115,16 @@ Examples:
 - `refactor: simplify player movement animation update`
 
 Keep commits atomic and stage files selectively. `git add .` is usually the wrong choice for this repository.
+
+AI-assisted commits are allowed and encouraged to preserve contribution history when that matches your workflow.
+
+- If you want AI contributors such as Claude or Codex to appear in Git history or GitHub contributor attribution, use the corresponding bot or service identity as the git author
+- If a commit is authored by an AI agent, the commit message must include a `Co-authored-by:` trailer for that same agent identity
+- A plain `claude` or `codex` mention in the commit subject alone usually does not make that identity appear in GitHub Contributors
+- If you use an AI identity, make sure the author name and email are intentionally configured for that identity before committing
+
+Example trailer:
+
+```text
+Co-authored-by: Codex <codex@example.com>
+```

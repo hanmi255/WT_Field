@@ -115,3 +115,16 @@ Godot 项目依赖稳定的场景路径、资源引用和 UID。
 - `refactor: simplify player movement animation update`
 
 保持提交原子化，并选择性暂存文件。对这个仓库来说，`git add .` 通常不是个好主意。
+
+允许并鼓励使用 AI 参与的提交方式，只要这符合你的工作流，并且你希望保留对应的贡献记录。
+
+- 如果你希望 Claude、Codex 等 AI 在 git 历史或 GitHub Contributors 归属中出现，请直接使用对应 bot 或服务身份作为 git author
+- 如果某次 commit 由 AI Agent 完成，那么该 commit message 中必须包含对应 Agent 身份的 `Co-authored-by:` trailer
+- 只在 commit subject 里写 `claude` 或 `codex`，通常并不会让它们出现在 GitHub Contributors 中
+- 如果要使用 AI 身份提交，请在 commit 前确认 author name 和 author email 已正确配置到该身份
+
+示例：
+
+```text
+Co-authored-by: Codex <codex@example.com>
+```

@@ -61,11 +61,12 @@ Do not treat external editor diagnostics alone as sufficient validation.
 
 ## Git Expectations
 
-- Keep commits atomic
-- Stage files selectively
-- Use clear English commit messages
-- Do not force-push unless the user explicitly asks
-- Do not revert unrelated user changes
+- Keep PRs atomic: one feature, one fix, or one tightly related content change
+- Keep commits atomic as well: each commit should contain one coherent feature, fix, or other tightly related change, even if that change touches multiple files
+- Use clear commit messages in English
+- AI bot or service identities may be used as the git author when preserving AI contribution history is intentional
+- If a commit is made by an AI agent, the commit message must include a `Co-authored-by:` trailer for that agent identity
+- Do not document workflows, commands, or skills that do not exist in this repository
 
 ## Agent-Specific Notes
 
