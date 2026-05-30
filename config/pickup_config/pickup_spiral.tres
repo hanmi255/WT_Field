@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="PickupConfig" format=3 uid="uid://dln8ug5vnp3i5"]
 
 [ext_resource type="Texture2D" uid="uid://c0qlko3gvip7a" path="res://assets/atlas/pickup_spiral.tres" id="1_h3708"]
-[ext_resource type="Script" uid="uid://bs7vft57112k2" path="res://config/pickup_config.gd" id="1_kmgcs"]
+[ext_resource type="Script" uid="uid://bs7vft57112k2" path="res://config/pickup_config/pickup_config.gd" id="1_kmgcs"]
 
 [resource]
 script = ExtResource("1_kmgcs")
