@@ -10,6 +10,7 @@ const DEFAULT_MOVE_SPEED_MULTIPLIER: float = 1.0
 const DEFAULT_FIRE_RATE_MULTIPLIER: float = 1.0
 const SPIRAL_PHASE_STEP: float = PI / 12
 const BLINK_ENABLED_SHADER_PARAMETER: StringName = &"blink_enabled"
+const WORLD_COLLISION_MASK: int = 1
 
 
 # 移动速度，单位像素/秒
@@ -165,9 +166,8 @@ func _try_auto_spiral_shoot() -> void:
 		return
 
 	var spiral_direction := Vector2.RIGHT.rotated(_spiral_phase)
-	var has_spawned_bullet := _fire_bullets(spiral_direction)
-	if has_spawned_bullet:
-		_shooting_timer.start(_get_effective_fire_interval())
+	_fire_bullets(spiral_direction)
+	_shooting_timer.start(_get_effective_fire_interval())
 
 
 # 尝试发射子弹，先检查冷却，再根据当前弹幕模式发射
@@ -176,9 +176,8 @@ func _try_shoot(shoot_input: Vector2) -> void:
 		return
 
 	var shoot_direction := shoot_input.normalized()
-	var has_spawned_bullet := _fire_bullets(shoot_direction)
-	if has_spawned_bullet:
-		_shooting_timer.start(_get_effective_fire_interval())
+	_fire_bullets(shoot_direction)
+	_shooting_timer.start(_get_effective_fire_interval())
 
 
 func _refresh_shooting_timer_wait_time() -> void:
@@ -264,6 +263,9 @@ func _fire_bullets(base_direction: Vector2) -> bool:
 
 
 func _spawn_bullet(shoot_direction: Vector2) -> bool:
+	if not _can_spawn_bullet(shoot_direction):
+		return false
+
 	# 子弹挂载到主场景，避免跟随玩家移动
 	var spawn_parent := get_tree().current_scene
 	if spawn_parent == null:
@@ -279,6 +281,26 @@ func _spawn_bullet(shoot_direction: Vector2) -> bool:
 	spawn_parent.add_child(bullet)
 	bullet.global_position = global_position + shoot_direction * bullet_spawn_offset
 	return true
+
+
+# 检查从玩家中心到子弹出生点的路径是否被世界碰撞挡住
+func _can_spawn_bullet(shoot_direction: Vector2) -> bool:
+	var spawn_position := global_position + shoot_direction * bullet_spawn_offset
+	var space_state := get_world_2d().direct_space_state
+	if space_state == null:
+		return false
+
+	var query := PhysicsRayQueryParameters2D.create(
+		global_position,
+		spawn_position,
+		WORLD_COLLISION_MASK
+	)
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	query.exclude = [get_rid()]
+
+	var hit_result := space_state.intersect_ray(query)
+	return hit_result.is_empty()
 
 
 # 更新无敌时间，并在结束时关闭闪烁效果
