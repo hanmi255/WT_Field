@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://6rev4dlcmkom"]
 
+[ext_resource type="Script" uid="uid://duhy5oa2mmhmx" path="res://scripts/game.gd" id="1_lbhrr"]
 [ext_resource type="Texture2D" uid="uid://eol2ikpp7ks3" path="res://assets/texture/tile.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://cxsto67iiil5h" path="res://assets/texture/dynamic_tile.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://cssb115yl0pk2" path="res://scenes/player.tscn" id="3_lnu2h"]
@@ -91,6 +92,7 @@ b = Vector2(0, 256)
 b = Vector2(0, 256)
 
 [node name="Game" type="Node2D" unique_id=1927392127]
+script = ExtResource("1_lbhrr")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1055387437]
 offset = Vector2(128, 128)
@@ -106,6 +108,21 @@ tile_set = SubResource("TileSet_iywne")
 
 [node name="Player" parent="." unique_id=1404759806 instance=ExtResource("3_lnu2h")]
 position = Vector2(81, 87)
+
+[node name="EnemyContainer" type="Node2D" parent="." unique_id=1495460995]
+
+[node name="EnemySpawnPointsRoot" type="Node2D" parent="." unique_id=1026190497]
+
+[node name="SpawnLeft" type="Marker2D" parent="EnemySpawnPointsRoot" unique_id=15229151]
+position = Vector2(8, 144)
+
+[node name="SpawnRight" type="Marker2D" parent="EnemySpawnPointsRoot" unique_id=1421065641]
+position = Vector2(248, 144)
+
+[node name="SpawnBottom" type="Marker2D" parent="EnemySpawnPointsRoot" unique_id=111984236]
+position = Vector2(144, 248)
+
+[node name="EnemySpawnTimer" type="Timer" parent="." unique_id=541986490]
 
 [node name="WorldBounds" type="Node2D" parent="." unique_id=952979351]
 
