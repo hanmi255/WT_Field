@@ -27,6 +27,9 @@ enum DeathSequenceStage {
 @onready var _touch_damage_collision_shape: CollisionShape2D = $TouchDamageArea/CollisionShape2D
 @onready var _explosion_area: Area2D = $ExplosionArea
 @onready var _explosion_collision_shape: CollisionShape2D = $ExplosionArea/CollisionShape2D
+@onready var _explode_sfx_player: AudioStreamPlayer = $AudioContainer/ExplodeSFXPlayer
+@onready var _hit_sfx_player: AudioStreamPlayer = $AudioContainer/HitSFXPlayer
+@onready var _die_sfx_player: AudioStreamPlayer = $AudioContainer/DieSFXPlayer
 
 # 当前追踪的玩家对象，由敌人管理器在生成时注入
 var _target_player: Player = null
@@ -82,6 +85,7 @@ func apply_damage(amount: int) -> bool:
 		return true
 
 	_start_hurt_blink()
+	Utilities.play_sfx(_hit_sfx_player)
 	return true
 
 
@@ -254,6 +258,8 @@ func _start_death_sequence() -> void:
 		queue_free()
 		return
 
+	Utilities.play_sfx(_die_sfx_player)
+
 	if _play_death_sequence_animation(config.death_animation_name, DeathSequenceStage.DEATH):
 		return
 
@@ -279,6 +285,7 @@ func _start_explosion_sequence() -> void:
 		return
 
 	_try_apply_explosion_damage()
+	Utilities.play_sfx(_explode_sfx_player)
 
 	if _play_death_sequence_animation(config.explosion_animation_name, DeathSequenceStage.EXPLOSION):
 		return

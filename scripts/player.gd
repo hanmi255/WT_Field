@@ -28,6 +28,10 @@ const WORLD_COLLISION_MASK: int = 1
 @onready var _body_sprite: AnimatedSprite2D = $BodySprite
 @onready var _armed_effect_sprite: AnimatedSprite2D = $ArmedEffectSprite
 @onready var _shooting_timer: Timer = $ShootingTimer
+@onready var _shoot_sfx_player: AudioStreamPlayer = $AudioContainer/ShootSFXPlayer
+@onready var _move_sfx_player: AudioStreamPlayer = $AudioContainer/MoveSFXPlayer
+@onready var _pickup_sfx_player: AudioStreamPlayer = $AudioContainer/PickupSFXPlayer
+@onready var _hit_sfx_player: AudioStreamPlayer = $AudioContainer/HitSFXPlayer
 
 # 当前生命值，由最大生命值初始化
 var _current_health: int = 0
@@ -71,13 +75,16 @@ func _physics_process(delta: float) -> void:
 
 	if _is_dead:
 		velocity = Vector2.ZERO
+		_set_move_sfx_active(false)
 		return
 
 	var move_input := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var shoot_input := Input.get_vector("shoot_left", "shoot_right", "shoot_up", "shoot_down")
+	var is_moving := move_input != Vector2.ZERO
 
 	velocity = move_input * _get_effective_move_speed()
 	move_and_slide()
+	_set_move_sfx_active(is_moving)
 
 	if _shot_pattern == PickupConfig.ShotPattern.SPIRAL:
 		_try_auto_spiral_shoot()
@@ -133,6 +140,9 @@ func apply_pickup(config: PickupConfig) -> bool:
 	if should_refresh_shooting_timer:
 		_refresh_shooting_timer_wait_time()
 
+	if applied:
+		Utilities.play_sfx(_pickup_sfx_player)
+
 	return applied
 
 
@@ -144,6 +154,8 @@ func apply_damage(amount: int) -> bool:
 		return false
 	if _invincibility_time_left > 0.0:
 		return false
+
+	Utilities.play_sfx(_hit_sfx_player)
 
 	_current_health = maxi(_current_health - amount, 0)
 	if _current_health <= 0:
@@ -160,13 +172,36 @@ func get_current_health() -> int:
 	return _current_health
 
 
+func stop_runtime_audio():
+	_set_move_sfx_active(false)
+	if _shoot_sfx_player != null && _shoot_sfx_player.playing:
+		_shoot_sfx_player.stop()
+	if _pickup_sfx_player != null && _pickup_sfx_player.playing:
+		_pickup_sfx_player.stop()
+
+
+func _set_move_sfx_active(active: bool) -> void:
+	if _move_sfx_player == null or _move_sfx_player.stream == null:
+		return
+
+	if active:
+		if not _move_sfx_player.playing:
+			_move_sfx_player.play()
+		return
+
+	if _move_sfx_player.playing:
+		_move_sfx_player.stop()
+
+
 # 螺旋形态自动按固定节奏 360 度旋转发射
 func _try_auto_spiral_shoot() -> void:
 	if not _shooting_timer.is_stopped():
 		return
 
 	var spiral_direction := Vector2.RIGHT.rotated(_spiral_phase)
-	_fire_bullets(spiral_direction)
+	var has_spawned_bullet := _fire_bullets(spiral_direction)
+	if has_spawned_bullet:
+		Utilities.play_sfx(_shoot_sfx_player)
 	_shooting_timer.start(_get_effective_fire_interval())
 
 
@@ -176,7 +211,9 @@ func _try_shoot(shoot_input: Vector2) -> void:
 		return
 
 	var shoot_direction := shoot_input.normalized()
-	_fire_bullets(shoot_direction)
+	var has_spawned_bullet := _fire_bullets(shoot_direction)
+	if has_spawned_bullet:
+		Utilities.play_sfx(_shoot_sfx_player)
 	_shooting_timer.start(_get_effective_fire_interval())
 
 
@@ -217,6 +254,7 @@ func _die() -> void:
 	velocity = Vector2.ZERO
 	_invincibility_time_left = 0.0
 	_set_hurt_blink_enabled(false)
+	_set_move_sfx_active(false)
 	_shooting_timer.stop()
 	_armed_effect_sprite.visible = false
 	_armed_effect_sprite.stop()

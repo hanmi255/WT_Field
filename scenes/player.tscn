@@ -4,6 +4,10 @@
 [ext_resource type="Script" uid="uid://ddkf52cirvubu" path="res://scripts/player.gd" id="1_qhqgy"]
 [ext_resource type="Shader" uid="uid://7v7ckrpribi2" path="res://assets/shader/blink.gdshader" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://bxfmfb6ffsrmv" path="res://assets/texture/bit.png" id="2_g2els"]
+[ext_resource type="AudioStream" uid="uid://bapqftimqylr3" path="res://assets/audio/cowboy_gunshot.wav" id="5_fjrip"]
+[ext_resource type="AudioStream" uid="uid://jsnw48s3v0t" path="res://assets/audio/cowboy_footstep.wav" id="6_smehm"]
+[ext_resource type="AudioStream" uid="uid://bv8ebv3px631s" path="res://assets/audio/cowboy_powerup.wav" id="7_ur7pv"]
+[ext_resource type="AudioStream" uid="uid://cnjhme8006vd0" path="res://assets/audio/cowboy_gunload.wav" id="8_smehm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qlg0r"]
 shader = ExtResource("2_dqkch")
@@ -405,3 +409,17 @@ frame_progress = 0.93183815
 shape = SubResource("CircleShape2D_u8vuu")
 
 [node name="ShootingTimer" type="Timer" parent="." unique_id=1796005460]
+
+[node name="AudioContainer" type="Node" parent="." unique_id=1502762507]
+
+[node name="ShootSFXPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=150945126]
+stream = ExtResource("5_fjrip")
+
+[node name="MoveSFXPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=1879425078]
+stream = ExtResource("6_smehm")
+
+[node name="PickupSFXPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=481505286]
+stream = ExtResource("7_ur7pv")
+
+[node name="HitSFXPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=894459751]
+stream = ExtResource("8_smehm")

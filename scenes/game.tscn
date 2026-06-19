@@ -4,6 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://eol2ikpp7ks3" path="res://assets/texture/tile.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://cxsto67iiil5h" path="res://assets/texture/dynamic_tile.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://cssb115yl0pk2" path="res://scenes/player.tscn" id="3_lnu2h"]
+[ext_resource type="Texture2D" uid="uid://cm6tlgeqm8dms" path="res://assets/texture/item_ui.png" id="5_iywne"]
+[ext_resource type="FontFile" uid="uid://d3vo4hag5i7ci" path="res://assets/font/IPix.ttf" id="6_p57ef"]
+[ext_resource type="AudioStream" uid="uid://d3o0c12lqojxm" path="res://assets/audio/1-27_Journey_of_the_Prairie_King_(Overworld).mp3" id="7_0tnpc"]
+[ext_resource type="AudioStream" uid="uid://dfkl55saqroxg" path="res://assets/audio/cowboy_secret.wav" id="7_u5sy4"]
+[ext_resource type="AudioStream" uid="uid://bjl7bc842bri7" path="res://assets/audio/cowboy_dead.wav" id="8_gee14"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -91,6 +96,10 @@ b = Vector2(0, 256)
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_p57ef"]
 b = Vector2(0, 256)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_p57ef"]
+atlas = ExtResource("5_iywne")
+region = Rect2(16, 6, 48, 7)
+
 [node name="Game" type="Node2D" unique_id=1927392127]
 script = ExtResource("1_lbhrr")
 
@@ -147,3 +156,55 @@ shape = SubResource("SegmentShape2D_iywne")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/RightBoundary" unique_id=1572602145]
 position = Vector2(256, 0)
 shape = SubResource("SegmentShape2D_p57ef")
+
+[node name="HUDLayer" type="Node2D" parent="." unique_id=2012509618]
+
+[node name="LifeIcon" type="Sprite2D" parent="HUDLayer" unique_id=715093612]
+position = Vector2(-48, 16)
+texture = ExtResource("5_iywne")
+region_enabled = true
+region_rect = Rect2(0, 18, 16, 11)
+
+[node name="LifeCountLabel" type="Label" parent="HUDLayer" unique_id=1734212669]
+offset_left = -37.0
+offset_top = 7.0
+offset_right = 3.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("6_p57ef")
+text = "x5"
+
+[node name="TimeIcon" type="Sprite2D" parent="HUDLayer" unique_id=824779937]
+position = Vector2(8, -16)
+texture = ExtResource("5_iywne")
+region_enabled = true
+region_rect = Rect2(3, 2, 11, 13)
+
+[node name="TimeBar" type="Sprite2D" parent="HUDLayer" unique_id=190873433]
+position = Vector2(133, -15)
+scale = Vector2(4.875, 1)
+texture = SubResource("AtlasTexture_p57ef")
+region_rect = Rect2(16, 6, 48, 7)
+
+[node name="ResultDialog" type="AcceptDialog" parent="." unique_id=206710254]
+process_mode = 2
+oversampling_override = 1.0
+title = "游戏结束"
+position = Vector2i(0, 36)
+size = Vector2i(200, 100)
+unresizable = true
+dialog_text = "666666"
+
+[node name="AudioContainer" type="Node" parent="." unique_id=2105527404]
+
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=1420561323]
+stream = ExtResource("7_0tnpc")
+volume_db = -10.0
+autoplay = true
+
+[node name="WinSFXPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=730328057]
+process_mode = 2
+stream = ExtResource("7_u5sy4")
+
+[node name="LoseSFXPlayer" type="AudioStreamPlayer" parent="AudioContainer" unique_id=955196339]
+process_mode = 2
+stream = ExtResource("8_gee14")
